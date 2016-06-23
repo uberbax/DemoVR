@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/OVR/Scenes/Room.unity
+- path: Assets/OVR/Scenes/VRTestRoom.unity
   isLoaded: 1
   isActive: 1
