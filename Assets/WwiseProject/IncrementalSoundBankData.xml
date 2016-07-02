@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IncrementalBankBuild Version="6" Flags="878078161">
+	<Platform GUID="{7ADB9D1E-FCC7-404D-943E-3B39435E9CC5}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="3807728926" Timestamp="131009776399913558"/>
+				<File Name="Footsteps" Hash="788256214" Timestamp="131009776401083682"/>
+				<File Name="Init" Hash="2293427828" Timestamp="131009776401443785"/>
+				<File Name="Subtitles" Hash="3908258299" Timestamp="131009776401333657"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="2346446912" Timestamp="131009776401493664"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{B0C6A2EE-8B5A-4063-BE97-4F7DA314B184}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="3807728926" Timestamp="131009776402473737"/>
+				<File Name="Footsteps" Hash="788256214" Timestamp="131009776403483830"/>
+				<File Name="Init" Hash="781524636" Timestamp="131009776404053837"/>
+				<File Name="Subtitles" Hash="3908258299" Timestamp="131009776403913832"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="4073072625" Timestamp="131009776404094020"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{3FD15046-C005-41FD-98B0-068B13678218}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="3807728926" Timestamp="131009776424835239"/>
+				<File Name="Footsteps" Hash="788256214" Timestamp="131009776426065445"/>
+				<File Name="Init" Hash="2128642158" Timestamp="131009776426495354"/>
+				<File Name="Subtitles" Hash="3908258299" Timestamp="131009776426405359"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="3710001096" Timestamp="131009776426525355"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{B9285D13-AB48-42C5-9645-F59B68BAFB44}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="1107190617" Timestamp="131009776422295078"/>
+				<File Name="Footsteps" Hash="480882519" Timestamp="131009776423275272"/>
+				<File Name="Init" Hash="1095995336" Timestamp="131009776423565276"/>
+				<File Name="Subtitles" Hash="3221181630" Timestamp="131009776423475275"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="3085925089" Timestamp="131009776423605278"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{BD0BDF13-3125-454F-8BFD-319537169F82}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="3807728926" Timestamp="131009776388312783"/>
+				<File Name="Footsteps" Hash="788256214" Timestamp="131009776389582861"/>
+				<File Name="Init" Hash="1719133864" Timestamp="131009776390172907"/>
+				<File Name="Subtitles" Hash="3908258299" Timestamp="131009776389882881"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="103462793" Timestamp="131009776390202919"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{1FAD8921-625D-45DC-88D2-0CD18541C764}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="2631140587" Timestamp="131009776406884030"/>
+				<File Name="Footsteps" Hash="1714570227" Timestamp="131009776408304246"/>
+				<File Name="Init" Hash="2347725241" Timestamp="131009776408914164"/>
+				<File Name="Subtitles" Hash="1239169489" Timestamp="131009776408754221"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="3624584871" Timestamp="131009776408954190"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{ECE03DB4-F948-462D-B2BB-A9173012B1F9}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="3807728926" Timestamp="131009776383772466"/>
+				<File Name="Footsteps" Hash="788256214" Timestamp="131009776386742673"/>
+				<File Name="Init" Hash="4169293531" Timestamp="131009776387142793"/>
+				<File Name="Subtitles" Hash="3908258299" Timestamp="131009776387012711"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="4211230342" Timestamp="131009776387172796"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{9C6217D5-DD11-4795-87C1-6CE02853C541}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="398286068" Timestamp="131091526259250974"/>
+				<File Name="Footsteps" Hash="1088274479" Timestamp="131091526259250974"/>
+				<File Name="Init" Hash="2525373403" Timestamp="131091526259250974"/>
+				<File Name="Subtitles" Hash="2680056256" Timestamp="131091526259250974"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="1283467131" Timestamp="131091526259250974"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{6D6C8670-C66E-4956-9605-0AE6B3C82A05}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="1107190617" Timestamp="131009776394593209"/>
+				<File Name="Footsteps" Hash="480882519" Timestamp="131009776395443434"/>
+				<File Name="Init" Hash="1346593624" Timestamp="131009776395913302"/>
+				<File Name="Subtitles" Hash="3221181630" Timestamp="131009776395803286"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="2991403475" Timestamp="131009776395953416"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{869AD233-43F2-4C0F-9126-79F44C15E1DA}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="3807728926" Timestamp="131009776413134452"/>
+				<File Name="Footsteps" Hash="788256214" Timestamp="131009776420585047"/>
+				<File Name="Init" Hash="2325646513" Timestamp="131009776421225147"/>
+				<File Name="Subtitles" Hash="3908258299" Timestamp="131009776421115110"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="2506245092" Timestamp="131009776421254991"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{6E0CB257-C6C8-4C5C-8366-2740DFC441EC}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="398286068" Timestamp="131091526257375884"/>
+				<File Name="Footsteps" Hash="1088274479" Timestamp="131091526257532145"/>
+				<File Name="Init" Hash="781496845" Timestamp="131091526257532145"/>
+				<File Name="Subtitles" Hash="2680056256" Timestamp="131091526257375884"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="139958333" Timestamp="131091526257532145"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{D0468FE5-280B-4F80-9635-6C5BBFCA5474}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="3807728926" Timestamp="131009776397023367"/>
+				<File Name="Footsteps" Hash="788256214" Timestamp="131009776398103610"/>
+				<File Name="Init" Hash="592138877" Timestamp="131009776398723475"/>
+				<File Name="Subtitles" Hash="3908258299" Timestamp="131009776398463637"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="2687314820" Timestamp="131009776398763483"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+	<Platform GUID="{A2D401DE-B8B6-4FEB-8142-137C34D507CB}">
+		<Banks>
+			<Language ID="0">
+				<File Name="Environments" Hash="3807728926" Timestamp="131009776380392423"/>
+				<File Name="Footsteps" Hash="788256214" Timestamp="131009776381642329"/>
+				<File Name="Init" Hash="2518155089" Timestamp="131009776382182387"/>
+				<File Name="Subtitles" Hash="3908258299" Timestamp="131009776382082435"/>
+			</Language>
+		</Banks>
+		<XMLInfo>
+			<Language ID="-1">
+				<File Name="" Hash="3911514064" Timestamp="131009776382232390"/>
+			</Language>
+		</XMLInfo>
+	</Platform>
+</IncrementalBankBuild>

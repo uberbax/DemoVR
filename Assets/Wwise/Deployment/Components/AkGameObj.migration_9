@@ -1,0 +1,35 @@
+#if ! (UNITY_DASHBOARD_WIDGET || UNITY_WEBPLAYER || UNITY_WII || UNITY_NACL || UNITY_FLASH || UNITY_BLACKBERRY) // Disable under unsupported platforms.
+//////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2014 Audiokinetic Inc. / All Rights Reserved
+//
+//////////////////////////////////////////////////////////////////////
+
+using UnityEngine;
+using System;
+using System.Collections.Generic;
+
+[ExecuteInEditMode]
+public class AkGameObj : MonoBehaviour 
+{
+
+	const int ALL_LISTENER_MASK = (1<<AkSoundEngine.AK_NUM_LISTENERS)-1;
+	public AkGameObjPosOffsetData m_posOffsetData;
+    public bool isEnvironmentAware;
+	public AkGameObjEnvironmentData m_envData;
+	public int listenerMask = 1;
+	
+	[SerializeField]
+	private bool isStaticObject;
+	private AkGameObjPositionData m_posData;
+
+	
+	public void Migrate()
+	{
+		if( (listenerMask & ALL_LISTENER_MASK) == ALL_LISTENER_MASK )
+		{
+			listenerMask = 1;
+		}
+	}
+}
+#endif // #if ! (UNITY_DASHBOARD_WIDGET || UNITY_WEBPLAYER || UNITY_WII || UNITY_NACL || UNITY_FLASH || UNITY_BLACKBERRY) // Disable under unsupported platforms.

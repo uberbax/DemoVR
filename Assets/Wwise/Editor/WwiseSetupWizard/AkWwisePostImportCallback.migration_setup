@@ -1,0 +1,59 @@
+#if UNITY_EDITOR
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.Callbacks;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+
+[InitializeOnLoad]
+public class AkWwisePostImportCallback
+{
+	[DidReloadScripts(100000000)]
+	static void  PostImportFunction()
+    {				
+		WwiseSetupWizard.Settings = WwiseSettings.LoadSettings();
+		
+		AkWwiseMigrationWindow migrationWindow = AkWwiseMigrationWindow.Init();
+		
+		AkWwisePicker.PopulateTreeview();
+		
+		if(migrationWindow.state == MigrationWindowState.POST_IMPORT)
+		{
+			AkWwiseProjectInfo.GetData();
+            AkWwiseProjectInfo.Populate(); 
+
+			//populate trigger list
+            Type triggerBaseType = Type.GetType("AkTriggerBase, Assembly-CSharp");
+            FieldInfo triggerNamesField = typeof(AkWwiseProjectData).GetField("triggerNames");
+
+            if (triggerBaseType != null && triggerNamesField != null)
+            {
+                MethodInfo getDerivedTypesInfo = triggerBaseType.GetMethod("GetAllDerivedTypes");
+
+                if (getDerivedTypesInfo != null)
+                {
+                    List<Type> triggerTypes = (List<Type>)getDerivedTypesInfo.Invoke(null, null);
+                    List<string> triggerNames = (List<string>)triggerNamesField.GetValue(AkWwiseProjectInfo.GetData());
+
+                    if (triggerTypes != null && triggerNames != null)
+                    {
+                        for (int i = 0; i < triggerTypes.Count; i++)
+                        {
+                            triggerNames.Add(triggerTypes[i].Name);
+                        }
+                    }
+                }
+            }
+			
+			migrationWindow.state = MigrationWindowState.RECOMPILE;
+		}
+		else if(migrationWindow.state == MigrationWindowState.POST_RECOMPILE)
+		{
+			migrationWindow.state = MigrationWindowState.MIGRATE_GAME_OBJECTS;
+		}
+	}
+}
+
+#endif // UNITY_EDITOR

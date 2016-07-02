@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ValidationCache Version="1" SchemaVersion="72">
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Actor-Mixer Hierarchy\Default Work Unit.wwu" DateLow="4250276301" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Actor-Mixer Hierarchy\Factory SoundSeed Air Objects.wwu" DateLow="1878079872" DateHigh="30528646"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Actor-Mixer Hierarchy\Factory Synth One.wwu" DateLow="1878440254" DateHigh="30528646"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Attenuations\Default Work Unit.wwu" DateLow="4250366500" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Audio Devices\Default Work Unit.wwu" DateLow="4250306391" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Control Surface Sessions\Default Work Unit.wwu" DateLow="4250406597" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Conversion Settings\Default Work Unit.wwu" DateLow="4250396575" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Conversion Settings\Factory Conversion Settings.wwu" DateLow="1875729281" DateHigh="30528646"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Dynamic Dialogue\Default Work Unit.wwu" DateLow="4250371513" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Default Work Unit.wwu" DateLow="4250436671" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Factory Auro Headphone.wwu" DateLow="1570035688" DateHigh="30528643"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Factory Effects.wwu" DateLow="1876410954" DateHigh="30528646"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Factory iZotope Box Modeler.wwu" DateLow="2143746172" DateHigh="30528644"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Factory iZotope Delay.wwu" DateLow="2143746172" DateHigh="30528644"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Factory iZotope Dynamics.wwu" DateLow="2143746172" DateHigh="30528644"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Factory iZotope Filters.wwu" DateLow="2143751166" DateHigh="30528644"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Factory iZotope Hybrid Reverb Effects.wwu" DateLow="2145372053" DateHigh="30528644"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Factory iZotope Multiband Distortion.wwu" DateLow="2145372053" DateHigh="30528644"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Factory iZotope Singleband Distortion.wwu" DateLow="2145377070" DateHigh="30528644"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Effects\Factory McDSP Effects.wwu" DateLow="1572869494" DateHigh="30528643"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Events\Default Work Unit.wwu" DateLow="4250286327" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Game Parameters\Default Work Unit.wwu" DateLow="4250441684" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Game Parameters\Factory SoundSeed Air Game Syncs.wwu" DateLow="1878139946" DateHigh="30528646"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Interactive Music Hierarchy\Default Work Unit.wwu" DateLow="4250356478" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\MarsVRAudio.wproj" DateLow="4250246215" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Master-Mixer Hierarchy\Default Work Unit.wwu" DateLow="4250266283" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Mixing Sessions\Default Work Unit.wwu" DateLow="4250316382" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Modulators\Default Work Unit.wwu" DateLow="4250326404" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Presets\Default Work Unit.wwu" DateLow="4250381539" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Queries\Default Work Unit.wwu" DateLow="4250336426" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Queries\Factory Queries.wwu" DateLow="1877849656" DateHigh="30528646"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\SoundBanks\Default Work Unit.wwu" DateLow="4250416627" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Soundcaster Sessions\Default Work Unit.wwu" DateLow="4250386552" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\States\Default Work Unit.wwu" DateLow="4250451710" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Switches\Default Work Unit.wwu" DateLow="4250296342" DateHigh="30528676"/>
+	<ValidationCacheItem File="D:\Traverse\MarsVR\WwiseProject\MarsVRAudio\Triggers\Default Work Unit.wwu" DateLow="4250346456" DateHigh="30528676"/>
+</ValidationCache>

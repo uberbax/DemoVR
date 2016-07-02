@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{BA707AD0-F203-46D6-975C-61D1C3D9E546}" SchemaVersion="72">
+	<SoundBanks>
+		<WorkUnit Name="Default Work Unit" ID="{BA707AD0-F203-46D6-975C-61D1C3D9E546}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="Footsteps" ID="{C39A5E65-1A97-4C82-B55A-FE84C646227D}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Footstep" ID="{44E3DE84-B37A-44BD-864A-2261F7CCBEFA}" WorkUnitID="{6A82CCC2-FC68-4CF7-B7A8-397BAEFB847C}" Filter="7" Origin="Manual"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Subtitles" ID="{BAEE653F-7445-4F47-BFB4-E229B11A3124}">
+					<ObjectInclusionList>
+						<ObjectRef Name="PlaySubtitles" ID="{E1495726-08FA-4ADC-8C53-C1051E5618C1}" WorkUnitID="{6A82CCC2-FC68-4CF7-B7A8-397BAEFB847C}" Filter="7" Origin="Manual"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Environments" ID="{BCF47F5A-68DD-4E21-90DB-89FC1D4F672B}">
+					<ObjectInclusionList>
+						<ObjectRef Name="PlayImpact" ID="{E96687EC-1239-4B82-87EE-CAD782698541}" WorkUnitID="{6A82CCC2-FC68-4CF7-B7A8-397BAEFB847C}" Filter="7" Origin="Manual"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
+	</SoundBanks>
+</WwiseDocument>

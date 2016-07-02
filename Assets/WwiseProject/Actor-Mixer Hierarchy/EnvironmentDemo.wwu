@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{F5B9BDC9-A45E-41C0-A53A-CE7813E774FD}" SchemaVersion="72">
+	<AudioObjects>
+		<WorkUnit Name="EnvironmentDemo" ID="{F5B9BDC9-A45E-41C0-A53A-CE7813E774FD}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="imp_axe_stone_04" ID="{9F686227-8356-4DDD-A215-0FEB3F6EAE93}" ShortID="688390274" Type="SoundFX">
+					<PropertyList>
+						<Property Name="UseGameAuxSends" Type="bool" Value="True"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{40E2D937-3626-46EA-9FEE-B10E15F6FDDF}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CAD3E5A5-0D7B-40D2-BBB3-2D84129754E0}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="imp_axe_stone_04" ID="{1AB0C45F-2C37-4FE8-8EAE-8C351898EEE8}" ShortID="652817804">
+							<Language>SFX</Language>
+							<AudioFile>imp_axe_stone_04.wav</AudioFile>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="imp_axe_stone_04" ID="{1AB0C45F-2C37-4FE8-8EAE-8C351898EEE8}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

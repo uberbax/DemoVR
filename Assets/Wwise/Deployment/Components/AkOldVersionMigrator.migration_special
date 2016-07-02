@@ -1,0 +1,73 @@
+#if ! (UNITY_DASHBOARD_WIDGET || UNITY_WEBPLAYER || UNITY_WII || UNITY_NACL || UNITY_FLASH || UNITY_BLACKBERRY) // Disable under unsupported platforms.
+//////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2014 Audiokinetic Inc. / All Rights Reserved
+//
+//////////////////////////////////////////////////////////////////////
+
+using UnityEngine;
+using System.Collections.Generic;
+using System;
+
+public class AkOldVersionMigrator : UnityEngine.Object
+{
+    public static void StaticMigrate()
+    {
+		AkGlobalSoundEngineInitializer[] initializers = UnityEngine.Object.FindObjectsOfType<AkGlobalSoundEngineInitializer>();
+		if (initializers.Length > 1)
+		{
+			Debug.LogWarning("WwiseUnity: Migration: found more than one Initializer script. Only one should exist");
+		}
+
+		foreach (AkGlobalSoundEngineInitializer initializer in initializers)
+		{
+			AkInitializer newInit = initializer.gameObject.AddComponent<AkInitializer>();
+
+			newInit.basePath = initializer.basePath;
+			newInit.language = initializer.language;
+			newInit.defaultPoolSize = initializer.defaultPoolSize;
+			newInit.lowerPoolSize = initializer.lowerPoolSize;
+			newInit.streamingPoolSize = initializer.streamingPoolSize;
+			newInit.memoryCutoffThreshold = initializer.memoryCutoffThreshold;
+
+			Component.DestroyImmediate(initializer);
+		}
+
+		AkGlobalSoundEngineTerminator[] terminators = UnityEngine.Object.FindObjectsOfType<AkGlobalSoundEngineTerminator>();
+		if (initializers.Length > 1)
+		{
+			Debug.LogWarning("WwiseUnity: Migration: found more than one Terminator script. Only one should exist");
+		}
+
+		foreach (AkGlobalSoundEngineTerminator terminator in terminators)
+		{
+			terminator.gameObject.AddComponent<AkTerminator>();
+			Component.DestroyImmediate(terminator);
+		}
+
+		AkGameObject[] akGameObjects = UnityEngine.Object.FindObjectsOfType<AkGameObject>();
+		foreach (AkGameObject akGameObject in akGameObjects)
+		{
+			akGameObject.gameObject.AddComponent<AkGameObj>();
+			Component.DestroyImmediate(akGameObject);
+		}
+
+		AkGameObjectTracker[] akGameObjectTrackers = UnityEngine.Object.FindObjectsOfType<AkGameObjectTracker>();
+		foreach (AkGameObjectTracker akGameObjectTracker in akGameObjectTrackers)
+		{
+			akGameObjectTracker.gameObject.AddComponent<AkGameObj>();
+			Component.DestroyImmediate(akGameObjectTracker);
+		}
+
+		AkListener[] akListeners = UnityEngine.Object.FindObjectsOfType<AkListener>();
+		foreach (AkListener akListener in akListeners)
+		{
+			AkAudioListener newListener = akListener.gameObject.AddComponent<AkAudioListener>();
+
+			newListener.listenerId = akListener.listenerId;
+
+			Component.DestroyImmediate(akListener);
+		}
+    }
+}
+#endif // #if ! (UNITY_DASHBOARD_WIDGET || UNITY_WEBPLAYER || UNITY_WII || UNITY_NACL || UNITY_FLASH || UNITY_BLACKBERRY) // Disable under unsupported platforms.

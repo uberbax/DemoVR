@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{40E2D937-3626-46EA-9FEE-B10E15F6FDDF}" SchemaVersion="72">
+	<Conversions>
+		<WorkUnit Name="Default Work Unit" ID="{40E2D937-3626-46EA-9FEE-B10E15F6FDDF}" PersistMode="Standalone">
+			<ChildrenList>
+				<Conversion Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}">
+					<PropertyList>
+						<Property Name="Channels" Type="int32">
+							<ValueList>
+								<Value Platform="VitaHW">4</Value>
+								<Value Platform="VitaSW">4</Value>
+								<Value Platform="XboxOne">4</Value>
+								<Value Platform="Xbox360">4</Value>
+								<Value Platform="Linux">4</Value>
+								<Value Platform="WiiUSW">4</Value>
+								<Value Platform="iOS">4</Value>
+								<Value Platform="Mac">4</Value>
+								<Value Platform="PS3">4</Value>
+								<Value Platform="WindowsPhone">4</Value>
+								<Value Platform="Windows">4</Value>
+								<Value Platform="PS4">4</Value>
+								<Value Platform="Android">4</Value>
+							</ValueList>
+						</Property>
+						<Property Name="LRMix" Type="Real64">
+							<ValueList>
+								<Value Platform="VitaHW">0</Value>
+								<Value Platform="VitaSW">0</Value>
+								<Value Platform="XboxOne">0</Value>
+								<Value Platform="Xbox360">0</Value>
+								<Value Platform="Linux">0</Value>
+								<Value Platform="WiiUSW">0</Value>
+								<Value Platform="iOS">0</Value>
+								<Value Platform="Mac">0</Value>
+								<Value Platform="PS3">0</Value>
+								<Value Platform="WindowsPhone">0</Value>
+								<Value Platform="Windows">0</Value>
+								<Value Platform="PS4">0</Value>
+								<Value Platform="Android">0</Value>
+							</ValueList>
+						</Property>
+						<Property Name="MaxSampleRate" Type="int32">
+							<ValueList>
+								<Value Platform="VitaHW">0</Value>
+								<Value Platform="VitaSW">0</Value>
+								<Value Platform="XboxOne">0</Value>
+								<Value Platform="Xbox360">0</Value>
+								<Value Platform="Linux">0</Value>
+								<Value Platform="WiiUSW">0</Value>
+								<Value Platform="iOS">0</Value>
+								<Value Platform="Mac">0</Value>
+								<Value Platform="PS3">0</Value>
+								<Value Platform="WindowsPhone">0</Value>
+								<Value Platform="Windows">0</Value>
+								<Value Platform="PS4">0</Value>
+								<Value Platform="Android">0</Value>
+							</ValueList>
+						</Property>
+						<Property Name="MinSampleRate" Type="int32">
+							<ValueList>
+								<Value Platform="VitaHW">0</Value>
+								<Value Platform="VitaSW">0</Value>
+								<Value Platform="XboxOne">0</Value>
+								<Value Platform="Xbox360">0</Value>
+								<Value Platform="Linux">0</Value>
+								<Value Platform="WiiUSW">0</Value>
+								<Value Platform="iOS">0</Value>
+								<Value Platform="Mac">0</Value>
+								<Value Platform="PS3">0</Value>
+								<Value Platform="WindowsPhone">0</Value>
+								<Value Platform="Windows">0</Value>
+								<Value Platform="PS4">0</Value>
+								<Value Platform="Android">0</Value>
+							</ValueList>
+						</Property>
+						<Property Name="SampleRate" Type="int32">
+							<ValueList>
+								<Value Platform="VitaHW">0</Value>
+								<Value Platform="VitaSW">0</Value>
+								<Value Platform="XboxOne">0</Value>
+								<Value Platform="Xbox360">0</Value>
+								<Value Platform="Linux">0</Value>
+								<Value Platform="WiiUSW">0</Value>
+								<Value Platform="iOS">0</Value>
+								<Value Platform="Mac">0</Value>
+								<Value Platform="PS3">0</Value>
+								<Value Platform="WindowsPhone">0</Value>
+								<Value Platform="Windows">0</Value>
+								<Value Platform="PS4">0</Value>
+								<Value Platform="Android">0</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ConversionPluginInfoList>
+						<ConversionPluginInfo Platform="VitaHW">
+							<ConversionPlugin Name="" ID="{48CBB69E-FFBC-4FEC-9B4F-4C023D214618}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="VitaSW">
+							<ConversionPlugin Name="" ID="{7E972D96-6668-4103-9775-12316581761E}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="XboxOne">
+							<ConversionPlugin Name="" ID="{08017F06-56F0-44D6-88DA-E7AD3495DB81}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="Xbox360">
+							<ConversionPlugin Name="" ID="{BE8D8CDB-BAB3-4B33-9575-B494868E414E}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="Linux">
+							<ConversionPlugin Name="" ID="{2499EBAD-0740-4672-9390-9D939A8D9334}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="WiiUSW">
+							<ConversionPlugin Name="" ID="{25E1E221-9818-4AE9-A81B-5594B19F4107}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="iOS">
+							<ConversionPlugin Name="" ID="{52337F99-A45D-42BE-85A6-3041137CBBB9}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="Mac">
+							<ConversionPlugin Name="" ID="{F81E25EB-B6C5-4955-A05B-CDC8685B2E74}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="PS3">
+							<ConversionPlugin Name="" ID="{97E8B724-B7E0-475D-B833-05BE7A80D2D0}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="WindowsPhone">
+							<ConversionPlugin Name="" ID="{F46E9F9B-A29D-42FD-9187-8AF24847DE7B}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="Windows">
+							<ConversionPlugin Name="" ID="{5AE8E745-1FBB-491D-B725-F77A23BBF85E}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="PS4">
+							<ConversionPlugin Name="" ID="{D9DAE1C9-92B4-4E8A-ACB6-7A221C339DF9}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+						<ConversionPluginInfo Platform="Android">
+							<ConversionPlugin Name="" ID="{08D0F10F-3E37-4F52-862D-63149BC0791F}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+						</ConversionPluginInfo>
+					</ConversionPluginInfoList>
+				</Conversion>
+			</ChildrenList>
+		</WorkUnit>
+	</Conversions>
+</WwiseDocument>

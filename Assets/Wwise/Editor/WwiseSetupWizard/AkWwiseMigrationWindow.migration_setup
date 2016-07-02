@@ -1,0 +1,789 @@
+#if UNITY_EDITOR
+//////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2014 Audiokinetic Inc. / All Rights Reserved
+//
+//////////////////////////////////////////////////////////////////////
+
+using UnityEngine;
+using UnityEditor;
+using System;
+using System.IO;
+using System.Text;
+using System.Reflection;
+using System.Collections;
+using System.Collections.Generic;
+
+
+public enum MigrationWindowState
+{
+    WAIT_FOR_USER,
+    IMPORT,
+    POST_IMPORT,
+    RECOMPILE,
+    POST_RECOMPILE,
+    MIGRATE_GAME_OBJECTS,
+    CANCEL,
+    DONE
+}
+
+
+public class AkWwiseMigrationWindow : EditorWindow
+{
+    const int INTEGRATION_NUMBER_2013_2_8 = 1;
+    const int INTEGRATION_NUMBER_2014_1_BETA = 2;
+    const int BUILD_NUMBER_2013_2_8 = 4865;
+    const int BUILD_NUMBER_2014_1_BETA = 5073;
+    const int UNITY_INTEGRATION_VERSION_LINE_NUMBER = 6;
+
+    private GUIStyle m_welcomeStyle = null;
+    private GUIStyle m_helpStyle = null;
+    private Texture2D m_logo = null;
+
+
+    //Intermediate migration scripts
+	[SerializeField] string[] m_intermediateFiles = null;
+
+    //All the saved scenes of the current unity project
+	[SerializeField] string[] m_scenes = null;
+
+	[SerializeField] int m_installedIntegrationNumber;
+    [SerializeField] int m_newIntegrationNumber;
+	[SerializeField] int m_completedMigrations = 0;
+	
+	[SerializeField] string m_installedIntegrationVersion;
+	[SerializeField] string m_newIntegrationVersion;
+
+    public MigrationWindowState state = MigrationWindowState.WAIT_FOR_USER;
+
+	[SerializeField] string			m_editorPlatform;
+	[SerializeField] string 		m_patformToInstall;
+	[SerializeField] List<string>	m_platformsToDelete;
+
+	[SerializeField] Vector2		m_scrollViewPos = new Vector2(0,0);
+
+    public static AkWwiseMigrationWindow Init()
+    {
+        AkWwiseMigrationWindow window = EditorWindow.GetWindow<AkWwiseMigrationWindow>();
+        window.position = new Rect(100, 100, 850, 250);
+#if !UNITY_5 || UNITY_5_0
+        window.title = "Migration";
+#else
+        window.titleContent = new GUIContent("Migration");
+#endif
+
+        return window;
+    }
+
+    void OnEnable()
+    {
+        try
+        {
+            if (m_scenes == null)
+            {
+                //Get all saved scenes
+                FileInfo[] sceneInfo = new DirectoryInfo(Application.dataPath).GetFiles("*.unity", SearchOption.AllDirectories);
+                m_scenes = new string[sceneInfo.Length];
+                for (int i = 0; i < m_scenes.Length; i++)
+                {
+                    m_scenes[i] = "Assets" + sceneInfo[i].FullName.Substring(Application.dataPath.Length);
+                }
+
+                //Get the platform the editor is running on
+#if UNITY_EDITOR_WIN
+                m_editorPlatform = "Windows";
+#elif UNITY_EDITOR_OSX
+				m_editorPlatform = "Mac";
+#endif
+
+                //Get the name of the platform we're currently installing
+                m_patformToInstall = System.IO.File.ReadAllLines(Application.dataPath + "/Wwise/NewVersion.txt")[8].Split(' ')[2];
+
+                //Get the list of outdated platform plugins we're going to delete				
+                m_platformsToDelete = GetInstalledPlatformNames();
+                m_platformsToDelete.Remove(m_patformToInstall);
+                m_platformsToDelete.Remove(m_editorPlatform);
+
+                //We get the version of the integration that is currently installed
+                string[] VersionTxtLines = System.IO.File.ReadAllLines(Application.dataPath + "/Wwise/Version.txt");
+                int installedIntegrationBuildNumber = Convert.ToInt32(VersionTxtLines[4].Split(' ')[6]);
+                m_installedIntegrationVersion = VersionTxtLines[4].Split(' ')[4];
+                if (m_installedIntegrationVersion[m_installedIntegrationVersion.Length - 1] == '0')
+                    m_installedIntegrationVersion = m_installedIntegrationVersion.Remove(m_installedIntegrationVersion.Length - 2);
+
+                //We get the version of the integration that will be installed
+                string[] newVersionTxtLines = System.IO.File.ReadAllLines(Application.dataPath + "/Wwise/NewVersion.txt");
+                m_newIntegrationVersion = newVersionTxtLines[4].Split(' ')[4];
+                if (m_newIntegrationVersion[m_newIntegrationVersion.Length - 1] == '0')
+                    m_newIntegrationVersion = m_newIntegrationVersion.Remove(m_newIntegrationVersion.Length - 2);
+
+                //Get the integrtion numbers
+                m_installedIntegrationNumber = GetInstalledIntegrationNumber(installedIntegrationBuildNumber);
+                m_newIntegrationNumber = Convert.ToInt32(System.IO.File.ReadAllLines(Application.dataPath + "/Wwise/NewVersion.txt")[6].Split(' ')[3]);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.ToString());
+        }
+    }
+
+    void Update()
+    {
+        switch (state)
+        {
+            case MigrationWindowState.IMPORT:
+                Import();
+                break;
+            case MigrationWindowState.MIGRATE_GAME_OBJECTS:
+                MigrateGameObjects();
+                break;
+            case MigrationWindowState.RECOMPILE:
+                Recompile();
+                break;
+            case MigrationWindowState.CANCEL:
+                Close();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void OnGUI()
+    {
+        // Make sure everything is initialized
+        if (m_logo == null)
+        {
+            FetchWwiseLogo();
+        }
+        if (m_welcomeStyle == null)
+        {
+            InitGuiStyles();
+        }
+
+
+        GUILayout.BeginHorizontal("box");
+        {
+            GUILayout.Label(m_logo, GUILayout.Width(m_logo.width));
+            GUILayout.Label("Welcome to Wwise " + m_newIntegrationVersion + "!", m_welcomeStyle, GUILayout.Height(m_logo.height));
+        }
+        GUILayout.EndHorizontal();
+
+        // Make the HelpBox font size a little bigger
+        GUILayout.Label("A previous Wwise Unity Integration has been detected. The Unity project will be migrated from Wwise Unity Integration " + m_installedIntegrationVersion + " to Wwise Unity Integration " + m_newIntegrationVersion + ". " +
+                            "This Unity project should be backed up since this action is not reversible. If the Unity project is under source control, make sure to check out the Unity project folder before starting the migration.\n" +
+                            "Click start when ready",
+                            m_helpStyle
+                        );
+
+        if (m_platformsToDelete.Count != 0)
+        {
+            GUIStyle style = new GUIStyle(GUI.skin.label);
+            style.normal.textColor = Color.red;
+            GUILayout.Label("The following platforms integrations are now outdated and will be removed. Make sure to import the Wwise Unity Integration " + m_newIntegrationVersion + " for these platforms after migration has completed:",
+                                style
+                            );
+
+            m_scrollViewPos = GUILayout.BeginScrollView(m_scrollViewPos);
+            {
+                for (int i = 0; i < m_platformsToDelete.Count; i++)
+                {
+                    GUILayout.Label("\t-" + m_platformsToDelete[i], style);
+                }
+            }
+            GUILayout.EndScrollView();
+        }
+
+
+        GUILayout.BeginVertical();
+        {
+            GUILayout.FlexibleSpace();
+
+            GUILayout.BeginHorizontal();
+            {
+                GUILayout.FlexibleSpace();
+
+                if (state == MigrationWindowState.WAIT_FOR_USER)
+                {
+                    if (GUILayout.Button("Start", GUILayout.Width(200)))
+                    {
+                        Debug.Log("WwiseUnity: Starting migration...");
+                        state = MigrationWindowState.IMPORT;
+                    }
+
+                    if (GUILayout.Button("Cancel", GUILayout.Width(200)))
+                    {
+                        state = MigrationWindowState.CANCEL;
+                    }
+                }
+                else
+                {
+                    GUILayout.Label("Please wait until this window closes before continuing.");
+                }
+                GUILayout.FlexibleSpace();
+
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(5);
+        }
+        GUILayout.EndVertical();
+    }
+
+    void Import()
+    {
+        try
+        {
+            FileInfo[] files;
+
+            //We empty all the generated source files from the old integration because some of them may have been deleted in the new version
+            files = new DirectoryInfo(Application.dataPath + "/Wwise/Deployment/API/Generated").GetFiles("*.cs", SearchOption.AllDirectories);
+            foreach (FileInfo file in files)
+            {
+				if( !File.Exists(Application.dataPath + "/Wwise/Deployment/API/Generated" + Path.GetFileNameWithoutExtension(file.Name) + ".new") )
+				{
+					// This API file was removed from the new integration, simply delete it.
+					File.Delete(file.FullName);
+				}
+				else
+				{
+					string[] lines = { "public class " + Path.GetFileNameWithoutExtension(file.Name) + "{}" };
+					System.IO.File.WriteAllLines(file.FullName, lines);
+				}
+            }
+
+            // Delete Editor scripts that were removed from the new integration
+			string[] editorFilesToDelete = { 
+				Application.dataPath + "/Wwise/Editor/WwiseWindows/AkWwisePlatformBuilder.cs",
+				Application.dataPath + "/Wwise/Editor/WwiseWindows/AkWwiseWWUWatcher.cs",
+				Application.dataPath + "/Wwise/Editor/WwiseWindows/MacFileSystemWatcher.cs"
+				};
+				
+			foreach(string editorFile in editorFilesToDelete)
+			{			
+				if (File.Exists(editorFile))
+				{
+					File.Delete(editorFile);
+				}
+			}
+			
+            //Classes which we dont want to compile their new version(.new extension)
+            List<string> noCompileList = new List<string>();
+
+            //Get the names of all the migration files so we can know which files with the .new extension we don't want to compile right now 
+            files = new DirectoryInfo(Application.dataPath + "/Wwise").GetFiles("*.migration_*", SearchOption.AllDirectories);
+            foreach (FileInfo file in files)
+            {
+                noCompileList.Add(Path.GetFileNameWithoutExtension(file.Name));
+            }
+
+            //We don't want to compile the new inspectors. So we add them to the list.
+            files = new DirectoryInfo(Application.dataPath + "/Wwise/Editor/WwiseComponents").GetFiles("*.new", SearchOption.AllDirectories);
+            foreach (FileInfo file in files)
+            {
+                noCompileList.Add(Path.GetFileNameWithoutExtension(file.Name));
+            }
+
+
+            //We rename the .new files so they can be compiled by unity
+            Debug.Log("WwiseUnity: Importing new script...");
+            files = new DirectoryInfo(Application.dataPath + "/Wwise").GetFiles("*.new", SearchOption.AllDirectories);
+            foreach (FileInfo file in files)
+            {
+                //Only classes that are not in  the noCompileList are renamed
+                if (!noCompileList.Contains(Path.GetFileNameWithoutExtension(file.Name)))
+                {
+                    File.Delete(Path.ChangeExtension(file.FullName, ".cs"));
+                    File.Move(file.FullName, Path.ChangeExtension(file.FullName, ".cs"));
+                }
+            }
+
+            //We empty the inspector classes so they don't cause any errors 
+            Debug.Log("WwiseUnity: Emptying old inspector scripts...");
+            files = new DirectoryInfo(Application.dataPath + "/Wwise/Editor/WwiseComponents").GetFiles("*.cs", SearchOption.AllDirectories);
+            foreach (FileInfo file in files)
+            {
+                string[] lines = { "using UnityEditor;", "public class " + Path.GetFileNameWithoutExtension(file.Name) + " : Editor {}" };
+                System.IO.File.WriteAllLines(file.FullName, lines);
+            }
+
+
+            //Delete all plugins from Assets/Plugins since they are outdated.
+            Debug.Log("WwiseUnity: Uninstalling old plugins...");
+			string pluginsPath = Path.Combine(Application.dataPath, "plugins");
+			if (Directory.Exists(pluginsPath))
+			{
+				DirectoryInfo pluginsDirectory = new DirectoryInfo(pluginsPath);
+
+				// A .bundle is a folder, and not a file. We need to treat it as so...
+				DirectoryInfo[] bundleDirectories = pluginsDirectory.GetDirectories("*AkSoundEngine*", SearchOption.AllDirectories);
+				foreach (DirectoryInfo bundle in bundleDirectories)
+				{
+					bundle.Delete(true);
+					if (Directory.Exists(bundle.FullName))
+					{
+						Debug.LogError("WwiseUnity: Access denied: " + bundle.FullName + "\nWhen the migration is completed, reopen your Unity project and install the " + m_editorPlatform + " platform by going to Assets->Wwise->Install Plugins->" + m_editorPlatform);
+					}
+				}
+
+				FileInfo[] foundPlugins = pluginsDirectory.GetFiles("*AkSoundEngine*", SearchOption.AllDirectories);
+				foreach (FileInfo file in foundPlugins)
+				{
+					string nameToDelete = "Assets" + file.FullName.Substring(Application.dataPath.Length);
+					Debug.Log("WwiseUnity: Deleting old plugin: " + nameToDelete);
+					AssetDatabase.DeleteAsset(nameToDelete);
+					if (!file.Name.Contains(".meta") && File.Exists(file.FullName))
+					{
+						Debug.LogError("WwiseUnity: Access denied: " + file.FullName + "\nWhen the migration is completed, reopen your Unity project and install the " + m_editorPlatform + " platform by going to Assets->Wwise->Install Plugins->" + m_editorPlatform);
+					}
+				}
+			}
+
+            //Delete all plugins since they are outdated except for the platform we're currently installing
+            List<string> platformsTokeep = new List<string>(2);
+            platformsTokeep.Add(m_patformToInstall);
+            platformsTokeep.Add(m_editorPlatform);
+
+            RemovePlatfromFolders("Wwise/Editor/WwiseMenu", platformsTokeep);
+            RemovePlatfromFolders("Wwise/Deployment/API/Generated", platformsTokeep);
+
+            platformsTokeep[0] += "_new";
+            platformsTokeep[1] += "_new";
+
+            RemovePlatfromFolders("Wwise/Deployment/Plugins", platformsTokeep);
+
+            AssetDatabase.RenameAsset("Assets/Wwise/Deployment/Plugins/" + m_patformToInstall + "_new", m_patformToInstall);
+            if (m_patformToInstall != m_editorPlatform)
+            {
+                AssetDatabase.RenameAsset("Assets/Wwise/Deployment/Plugins/" + m_editorPlatform + "_new", m_editorPlatform);
+            }
+
+
+            state = MigrationWindowState.POST_IMPORT;
+
+            //Refresh the assets database to trigger a recompilation
+            Debug.Log("WwiseUnity: Compile scripts...");
+            AssetDatabase.Refresh();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.ToString());
+			state = MigrationWindowState.CANCEL;
+        }
+    }
+
+    void MigrateGameObjects()
+    {
+        //Get the name of the currently opened scene 
+#if UNITY_5_0 || UNITY_5_1 || UNITY_5_2
+        string currentScene = EditorApplication.currentScene.Replace('/', '\\');
+#else
+		UnityEngine.SceneManagement.Scene activeScene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+		string currentScene = activeScene.path.Replace('/', '\\');
+#endif		
+		
+        for (int i = 0; i < m_scenes.Length; i++)
+        {
+            //Save the current scene and open a new one
+#if UNITY_5_0 || UNITY_5_1 || UNITY_5_2
+            EditorApplication.SaveScene();
+            EditorApplication.OpenScene(m_scenes[i]);
+#else
+			UnityEditor.SceneManagement.EditorSceneManager.SaveScene(activeScene);
+			activeScene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(m_scenes[i]);
+#endif		
+
+            foreach (string file in m_intermediateFiles)
+            {
+                //Since monobehaviour scripts need to have the same name as the class it contains, we can use it to get the type of the object
+                Type objectType = Type.GetType(Path.GetFileNameWithoutExtension(file) + ", Assembly-CSharp");
+				
+                //Get all objects in the scene with the specified type
+                UnityEngine.Object[] objects = UnityEngine.Object.FindObjectsOfType(objectType);
+
+                //Get the migration method 
+                MethodInfo migrateInfo = objectType.GetMethod("Migrate", BindingFlags.Public | BindingFlags.Instance);
+
+                if (migrateInfo != null)
+                {
+                    //call the migration method of each object
+                    foreach (UnityEngine.Object currentObject in objects)
+                    {
+                        migrateInfo.Invoke(currentObject, null);
+                    }
+                }
+                
+                MethodInfo staticMigrateInfo = objectType.GetMethod("StaticMigrate", BindingFlags.Public | BindingFlags.Static);
+                // Look for static migration functions
+                if (staticMigrateInfo != null)
+                {
+                    staticMigrateInfo.Invoke(null, null);
+                }
+            }
+        }
+
+        //Reopen the scene that was opened before the migration process started
+#if UNITY_5_0 || UNITY_5_1 || UNITY_5_2
+		EditorApplication.SaveScene();
+		EditorApplication.OpenScene(currentScene);
+#else
+		UnityEditor.SceneManagement.EditorSceneManager.SaveScene(activeScene);
+		activeScene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(currentScene);
+#endif		
+
+        if ((m_installedIntegrationNumber + m_completedMigrations) == m_newIntegrationNumber)
+        {
+            state = MigrationWindowState.DONE;
+            Close();
+        }
+        else
+        {
+            state = MigrationWindowState.RECOMPILE;
+        }
+    }
+	
+    void Recompile()
+    {
+        try
+        {
+            FileInfo[] files = new DirectoryInfo(Application.dataPath + "/Wwise").GetFiles("*.migration_" + (m_installedIntegrationNumber + m_completedMigrations), SearchOption.AllDirectories);
+
+            //Needed for the MigrateGameObjects function
+            m_intermediateFiles = new string[files.Length];
+			
+            // Special case for old (pre 2013.2.8) project migration
+            string WwiseDeploymentPath = Path.Combine(Path.Combine(Application.dataPath, "Wwise"), "Deployment");
+            if (File.Exists(Path.Combine(Path.Combine(WwiseDeploymentPath, "Examples"), "AkGlobalSoundEngineInitializer.cs")))
+            {
+                string scriptName = Path.Combine(Path.Combine(WwiseDeploymentPath, "Components"), "AkOldVersionMigrator.migration_special");
+                if (File.Exists(scriptName))
+                {
+					m_intermediateFiles = new string[files.Length + 1];
+					m_intermediateFiles[files.Length] = scriptName;
+					string newName = Path.ChangeExtension(scriptName, ".cs");
+					File.Move(scriptName, newName);
+					File.SetLastWriteTime(newName, DateTime.Now);
+                }
+            }
+			
+            for (int i = 0; i < files.Length; i++)
+            {
+                m_intermediateFiles[i] = files[i].Name;
+            }
+
+            //We delete the scripts that are not compatible with the new integration
+            //and replace them with intermediate scripts that are compatible with both versions
+            foreach (FileInfo file in files)
+            {
+                string cSharpScript = Path.ChangeExtension(file.FullName, ".cs");
+
+                File.Delete(cSharpScript);
+                File.Move(file.FullName, cSharpScript);
+                File.SetLastWriteTime(cSharpScript, DateTime.Now);
+            }
+
+            m_completedMigrations++;
+
+            if (files.Length != 0)
+            {
+                state = MigrationWindowState.POST_RECOMPILE;
+                AssetDatabase.Refresh();
+            }
+            else
+            {
+                // Unity won't call the PostImportCallback if nothing has changed, skip directly to the next step.
+                state = MigrationWindowState.MIGRATE_GAME_OBJECTS;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.ToString());
+        }
+    }
+
+    void OnDestroy()
+    {
+        try
+        {
+            // WAIT_FOR_USER means the user clicked the "x" to close the window. Cancel the migration in this case
+            bool bCancelInstall = state == MigrationWindowState.CANCEL || state == MigrationWindowState.WAIT_FOR_USER;
+            if (bCancelInstall)
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(Application.dataPath + "/Wwise");
+
+                //Delete the new scripts
+                FileInfo[] files = dirInfo.GetFiles("*.new", SearchOption.AllDirectories);
+                foreach (FileInfo file in files)
+                {
+                    File.Delete(file.FullName);
+                }
+
+                //Delete the intermediate migration files
+                files = dirInfo.GetFiles("*.migration_*", SearchOption.AllDirectories);
+                foreach (FileInfo file in files)
+                {
+                    File.Delete(file.FullName);
+                }
+
+                AssetDatabase.DeleteAsset("Assets/Wwise/Deployment/Plugins/" + m_patformToInstall + "_new");
+                AssetDatabase.DeleteAsset("Assets/Wwise/Deployment/Plugins/" + m_editorPlatform + "_new");
+
+                File.Delete(Application.dataPath + "/Wwise/NewVersion.txt");
+            }
+            else
+            {
+                //We replace the intermediate scripts with the new ones
+                DirectoryInfo dirInfo = new DirectoryInfo(Application.dataPath + "/Wwise");
+                FileInfo[] files = dirInfo.GetFiles("*.new", SearchOption.AllDirectories);
+                foreach (FileInfo file in files)
+                {
+                    string cSharpScript = Path.ChangeExtension(file.FullName, ".cs");
+
+                    File.Delete(cSharpScript);
+                    File.Move(file.FullName, cSharpScript);
+                    File.SetLastWriteTime(cSharpScript, DateTime.Now);
+                }
+
+                //Delete the leftover intermediate migration files
+                files = dirInfo.GetFiles("*.migration_*", SearchOption.AllDirectories);
+                foreach (FileInfo file in files)
+                {
+                    File.Delete(file.FullName);
+                }
+
+                //Rename the version file to Version.txt
+                File.Delete(Application.dataPath + "/Wwise/Version.txt");
+                File.Move(Application.dataPath + "/Wwise/NewVersion.txt", Application.dataPath + "/Wwise/Version.txt");
+            }
+
+            File.Delete(Application.dataPath + "/Wwise/Editor/WwiseSetupWizard/AkWwisePostImportCallback.cs");
+			if(File.Exists (Application.dataPath + "/Wwise/Editor/WwiseSetupWizard/AkWwiseFirstImportCallback.cs"))
+			{
+				File.Delete(Application.dataPath + "/Wwise/Editor/WwiseSetupWizard/AkWwiseFirstImportCallback.cs");
+			}
+
+            File.Move(Application.dataPath + "/Wwise/Editor/WwiseSetupWizard/AkWwisePostImportCallback.setup", Application.dataPath + "/Wwise/Editor/WwiseSetupWizard/AkWwisePostImportCallback.cs");
+            File.SetLastWriteTime(Application.dataPath + "/Wwise/Editor/WwiseSetupWizard/AkWwisePostImportCallback.cs", DateTime.Now);
+
+            if (bCancelInstall)
+            {
+                Debug.Log("WwiseUnity: Migration cancelled");
+            }
+            else if (state == MigrationWindowState.DONE)
+            {
+                SetAllScriptExecutionOrder();
+#if UNITY_5
+				AkPluginActivator.RefreshPlugins();
+#endif				
+				Debug.Log("WwiseUnity: Migration: project reload required");
+				EditorUtility.DisplayDialog("Warning", "Please reload your Unity project to complete the Wwise Integration migration.", "Ok");
+            }
+            else
+            {
+                Debug.Log("WwiseUnity: Migration failed");
+            }
+
+            AssetDatabase.Refresh();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.ToString());
+        }
+    }
+
+    // Change the execution order of all the necessary scripts
+    bool SetAllScriptExecutionOrder()
+    {
+        Dictionary<string, int> scriptsToModify = new Dictionary<string, int>();
+
+        // !!! WARNING !!! !!! WARNING !!! !!! WARNING !!! !!! WARNING !!! !!! WARNING !!! !!! WARNING !!!
+        // IF YOU MODIFY THIS LIST, MAKE SURE YOU MODIFY IT IN AkWwiseSetupWizard.cs AS WELL.
+        // !!! WARNING !!! !!! WARNING !!! !!! WARNING !!! !!! WARNING !!! !!! WARNING !!! !!! WARNING !!!
+        scriptsToModify.Add("AkInitializer", -100);
+        scriptsToModify.Add("AkBank", -75);
+        scriptsToModify.Add("AkAudioListener", -50);
+        scriptsToModify.Add("AkGameObj", -25);
+        scriptsToModify.Add("AkState", -20);
+        scriptsToModify.Add("AkSwitch", -10);
+        scriptsToModify.Add("AkTerminator", 100);
+
+        foreach (KeyValuePair<string, int> entry in scriptsToModify)
+        {
+            if (!SetScriptExecutionOrder(entry.Key, entry.Value))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Modifies the .meta file associated to a script to change its execution order
+    bool SetScriptExecutionOrder(string Script, int ExecutionOrder)
+    {
+        try
+        {
+            string DeploymentPath = Path.Combine(Path.Combine(Path.Combine(Application.dataPath, "Wwise"), "Deployment"), "Components");
+            string fileName = Path.Combine(DeploymentPath, Script + ".cs.meta");
+            string fileContents = File.ReadAllText(fileName);
+
+            // Get start and stop index for the line containing the executionOrder
+            int startIndex = fileContents.IndexOf("executionOrder");
+            int stopIndex = fileContents.IndexOf((char)0x0A, startIndex); // Line feed; find EOL for executionOrder
+            if (startIndex != -1)
+            {
+                // Find where the digit after "executionOrder" starts
+                int digitstartIndex = fileContents.IndexOfAny("-1234567890".ToCharArray(), startIndex);
+
+                // Remove everything from the start of the digit to the EOL, and add our own digit
+                fileContents = fileContents.Remove(digitstartIndex, stopIndex - digitstartIndex);
+                fileContents = fileContents.Insert(digitstartIndex, ExecutionOrder.ToString());
+            }
+            else
+            {
+                // If "executionOrder is not found in the file, add it.
+                fileContents += "executionOrder: " + ExecutionOrder.ToString();
+            }
+
+            // Temporarily un-hide the file so we can write to it
+            FileInfo Info = new FileInfo(fileName);
+            Info.Attributes &= ~FileAttributes.Hidden;
+
+            // Write to file
+            File.WriteAllText(fileName, fileContents);
+
+            // Re-hide the file
+            Info.Attributes |= FileAttributes.Hidden;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    int GetInstalledIntegrationNumber(int in_integrationBuildNumber)
+    {
+        string[] lines = File.ReadAllLines(Application.dataPath + "/Wwise/Version.txt");
+        if (lines.Length >= UNITY_INTEGRATION_VERSION_LINE_NUMBER)
+        {
+            return Convert.ToInt32(lines[UNITY_INTEGRATION_VERSION_LINE_NUMBER].Split(' ')[3]);
+        }
+        else if (in_integrationBuildNumber == BUILD_NUMBER_2014_1_BETA)
+        {
+            return INTEGRATION_NUMBER_2014_1_BETA;
+        }
+        else if (in_integrationBuildNumber == BUILD_NUMBER_2013_2_8)
+        {
+            return INTEGRATION_NUMBER_2013_2_8;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    List<string> GetInstalledPlatformNames()
+    {
+		List<string> installedPlugins = new List<string>();
+
+		try
+		{
+	        // Get a list of installed plugins
+	        string pluginsPath = Path.Combine(Path.Combine(Path.Combine(Application.dataPath, "Wwise"), "Deployment"), "Plugins");
+	        string[] foundPlatforms = Directory.GetDirectories(pluginsPath);
+			
+			foreach(string platform in foundPlatforms)
+			{
+				if(platform.Contains("_new"))
+				{
+					continue;
+				}
+				
+				installedPlugins.Add(Path.GetFileName(platform));
+			}
+
+	        // Special case for Windows Phone 8, as it has nothing in the Plugins folder
+	        if (File.Exists(Path.Combine(Path.Combine(Path.Combine(Application.dataPath, "Wwise"), "Editor"), "WP8PostBuildSteps.cs")))
+	        {
+	            installedPlugins.Add("Windows Phone 8");
+	        }
+		}
+		catch (Exception)
+		{
+		}
+
+        return installedPlugins;
+    }
+
+    // Go get the Wwise Logo from the Wwise installation folder
+    void FetchWwiseLogo()
+    {
+        // Pre-fetch the wwise logo
+        string logoPath = Path.Combine(Application.dataPath, "Wwise\\Gizmos\\wwise_white_on_gray.png");
+        logoPath = logoPath.Replace('\\', Path.DirectorySeparatorChar);
+        m_logo = new Texture2D(4, 4);
+        try
+        {
+            FileStream fs = new FileStream(logoPath, FileMode.Open, FileAccess.Read);
+            byte[] imageData = new byte[fs.Length];
+            fs.Read(imageData, 0, (int)fs.Length);
+            m_logo.LoadImage(imageData);
+        }
+        catch (Exception)
+        {
+            // Fail silentely, not too bad if we can't show the image...
+        }
+    }
+
+    // Initialize our required styles
+    void InitGuiStyles()
+    {
+        m_welcomeStyle = EditorStyles.whiteLargeLabel;
+        m_welcomeStyle.fontSize = 20;
+        m_welcomeStyle.alignment = TextAnchor.MiddleCenter;
+		if( !Application.HasProLicense() )
+		{
+			m_welcomeStyle.active.textColor = Color.black;
+			m_welcomeStyle.focused.textColor = Color.black;
+			m_welcomeStyle.hover.textColor = Color.black;
+			m_welcomeStyle.normal.textColor = Color.black;
+			m_welcomeStyle.onActive.textColor = Color.black;
+			m_welcomeStyle.onFocused.textColor = Color.black;
+			m_welcomeStyle.onHover.textColor = Color.black;
+			m_welcomeStyle.onNormal.textColor = Color.black;
+		}
+		
+
+        m_helpStyle = GUI.skin.GetStyle("box");
+        m_helpStyle.wordWrap = true;
+        m_helpStyle.alignment = TextAnchor.UpperLeft;
+        m_helpStyle.normal.textColor = EditorStyles.textField.normal.textColor;
+
+    }
+
+    void RemovePlatfromFolders(string in_dirPath, List<string> in_platform, bool in_keep = true)
+    {
+        DirectoryInfo[] platformDir = new DirectoryInfo(Application.dataPath + "/" + in_dirPath).GetDirectories();
+        foreach (DirectoryInfo dir in platformDir)
+        {
+            if (dir.Name != "Common")
+            {
+                if (in_platform.Contains(dir.Name))
+                {
+                    if (!in_keep)
+                        AssetDatabase.DeleteAsset("Assets" + dir.FullName.Substring(Application.dataPath.Length));
+                }
+                else
+                {
+                    if (in_keep)
+                        AssetDatabase.DeleteAsset("Assets" + dir.FullName.Substring(Application.dataPath.Length));
+                }
+            }
+        }
+    }
+}
+
+#endif

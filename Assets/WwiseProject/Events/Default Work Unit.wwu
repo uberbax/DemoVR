@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{6A82CCC2-FC68-4CF7-B7A8-397BAEFB847C}" SchemaVersion="72">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{6A82CCC2-FC68-4CF7-B7A8-397BAEFB847C}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Footstep" ID="{44E3DE84-B37A-44BD-864A-2261F7CCBEFA}">
+					<ChildrenList>
+						<Action Name="Play" ID="{FB1B78FE-F6D0-4C47-8A21-A6A7FD8FF0BE}" ShortID="37895167" Type="Play" Scope="One" Global="false">
+							<ElementList>
+								<Element ID="{8A5F51AD-355A-4ABD-A824-99A4627D2B6D}" Global="false">
+									<ObjectRef Name="Footsteps" ID="{B9AACCB4-790C-4F96-9F3B-7CDB94CA1197}" WorkUnitID="{4F57ECA1-45B1-4753-B7FA-B23715FE34F9}"/>
+								</Element>
+							</ElementList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="PlaySubtitles" ID="{E1495726-08FA-4ADC-8C53-C1051E5618C1}">
+					<ChildrenList>
+						<Action Name="Play" ID="{9073FAB6-2740-4738-B840-C59236DABDC1}" ShortID="65466123" Type="Play" Scope="One" Global="false">
+							<ElementList>
+								<Element ID="{9155E3DC-73DC-4D73-8207-B57B68610339}" Global="false">
+									<ObjectRef Name="Marker_Test_001" ID="{4BBEAE7D-D379-40FA-B0DB-6784953E9468}" WorkUnitID="{7F9055E0-6891-4C5D-8F27-27EE97BBFC7A}"/>
+								</Element>
+							</ElementList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="PlayImpact" ID="{E96687EC-1239-4B82-87EE-CAD782698541}">
+					<ChildrenList>
+						<Action Name="Play" ID="{272A1F81-20BA-4083-872B-C28B0B481FC6}" ShortID="508751600" Type="Play" Scope="One" Global="false">
+							<ElementList>
+								<Element ID="{073076C6-9667-4D20-816A-6D4FEFAFCBCC}" Global="false">
+									<ObjectRef Name="imp_axe_stone_04" ID="{9F686227-8356-4DDD-A215-0FEB3F6EAE93}" WorkUnitID="{F5B9BDC9-A45E-41C0-A53A-CE7813E774FD}"/>
+								</Element>
+							</ElementList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>
